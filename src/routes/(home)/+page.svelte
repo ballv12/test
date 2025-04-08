@@ -11,34 +11,36 @@
 	import Meta from '$lib/components/Meta.svelte';
 </script>
 
-<Meta title="Ball" description="Website." />
+<Meta title="vornexx" description="My portfolio and personal website." />
 
 <main class="wrapper fade">
-	<h1 class="header">Bell</h1>
+	<h1 class="header">vornexx</h1>
 
 	<p class="mt-4 text-gray-400">
-		Backflip enthusiast, and software developer.
+		I'm <b>vornexx.</b>, a person from
+		<b>Trinidad & Tobago (Trinidad)</b>.
+		In my free time I play Genshin Impact or Roblox or watch shows or movies.
 	</p>
 
 	<div class="mt-4 flex gap-6">
-		<SocialLink href="https://discord.com/users/607846264293556237" name="Discord">
+		<SocialLink href="https://discord.com/users/1149438819834269856" name="Discord">
 			<Discord />
 		</SocialLink>
 
 		
-		<SocialLink href="https://github.com/ballv12" name="GitHub">
+		<SocialLink href="https://github.com/vornexx" name="GitHub">
 			<GitHub />
 		</SocialLink>
 
 	
 		<SocialLink
-			href="https://open.spotify.com/user/316jwczyh7dbtwotza3tx2dr6bpy?si=69ea8ffb62c647bb"
+			href="https://spotify.vornexx.is-a.dev"
 			name="Spotify"
 		>
 			<Spotify />
 		</SocialLink>
 
-		<SocialLink href="mailto:ballcruzv@gmail.com" name="Email">
+		<SocialLink href="mailto:vornexx@disroot.org" name="Email">
 			<Envelope />
 		</SocialLink>
 	</div>

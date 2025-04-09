@@ -9,7 +9,8 @@
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"lint": "prettier --plugin-search-dir . --check . && eslint .",
-		"format": "prettier --plugin-search-dir . --write ."
+		"format": "prettier --plugin-search-dir . --write .",
+		"deploy": "gh-pages -d build"
 	},
 	"type": "module",
 	"dependencies": {
@@ -32,6 +33,7 @@
 		"eslint": "^8.57.0",
 		"eslint-config-prettier": "^9.1.0",
 		"eslint-plugin-svelte": "^2.35.1",
+		"gh-pages": "^6.3.0",
 		"postcss": "^8.4.36",
 		"postcss-each": "^1.1.0",
 		"postcss-load-config": "^5.0.3",

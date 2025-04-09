@@ -41,7 +41,7 @@
 </script>
 
 <Meta
-	title="Music – vornexx"
+	title="Music – Bell"
 	description="Tracks I've listened to the most on Spotify."
 />
 
@@ -50,7 +50,7 @@
 		<h1 class="header">Music</h1>
 
 		<p class="mt-4 text-gray-400">
-			Tracks I've listened to the most on Spotify (all data provided by my Spotify Account API 🐈).
+			I don't lessen to music as much as I used to, but here are some of the tracks l've listened to the most on Spotify.
 		</p>
 
 		<div class="mt-8 flex flex-wrap gap-x-8 gap-y-2 text-gray-400">

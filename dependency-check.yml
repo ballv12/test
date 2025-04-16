@@ -1,0 +1,30 @@
+name: Ensure Required Build Dependencies Are in Dependencies
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check-dependencies:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Parse package.json and fail if build deps are in devDependencies
+        run: |
+          node <<EOF
+          const fs = require('fs');
+          const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+          const criticalDeps = ['@sveltejs/vite-plugin-svelte'];
+          const devDeps = pkg.devDependencies || {};
+          const offenders = criticalDeps.filter(dep => devDeps[dep]);
+          
+          if (offenders.length > 0) {
+            console.error("❌ The following build-critical dependencies are in devDependencies:", offenders);
+            process.exit(1);
+          } else {
+            console.log("✅ All build-critical dependencies are correctly placed.");
+          }
+          EOF

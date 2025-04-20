@@ -13,6 +13,17 @@ export default {
     }),
     paths: {
       base: process.env.NODE_ENV === 'production' ? '/bell-main' : ''
+    },
+    prerender: {
+      handleHttpError: ({ path, referrer, message }) => {
+        // ignore deliberate link to API routes
+        if (path.startsWith('/api/')) {
+          return;
+        }
+
+        // otherwise fail the build
+        throw new Error(message);
+      }
     }
   },
   preprocess: preprocess(),

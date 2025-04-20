@@ -35,6 +35,11 @@ jobs:
         run: pnpm install
       - name: Build
         run: pnpm build
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+      - name: Copy .nojekyll
+        run: |
+          touch build/.nojekyll
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

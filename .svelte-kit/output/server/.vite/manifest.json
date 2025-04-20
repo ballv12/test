@@ -1,0 +1,143 @@
+{
+  ".svelte-kit/generated/server/internal.js": {
+    "file": "internal.js",
+    "src": ".svelte-kit/generated/server/internal.js",
+    "isEntry": true,
+    "imports": [
+      "_internal.js",
+      "_shared-server.js"
+    ]
+  },
+  "_Meta.js": {
+    "file": "chunks/Meta.js",
+    "imports": [
+      "_ssr.js"
+    ]
+  },
+  "_exports.js": {
+    "file": "chunks/exports.js"
+  },
+  "_index.js": {
+    "file": "chunks/index.js"
+  },
+  "_index2.js": {
+    "file": "chunks/index2.js",
+    "imports": [
+      "_ssr.js"
+    ]
+  },
+  "_internal.js": {
+    "file": "chunks/internal.js",
+    "imports": [
+      "_ssr.js",
+      "_shared-server.js"
+    ]
+  },
+  "_shared-server.js": {
+    "file": "chunks/shared-server.js"
+  },
+  "_spotify.js": {
+    "file": "chunks/spotify.js",
+    "imports": [
+      "_shared-server.js"
+    ]
+  },
+  "_ssr.js": {
+    "file": "chunks/ssr.js"
+  },
+  "_stores.js": {
+    "file": "chunks/stores.js",
+    "imports": [
+      "_ssr.js",
+      "_exports.js"
+    ]
+  },
+  "node_modules/.pnpm/@sveltejs+kit@2.5.4_@sveltejs+vite-plugin-svelte@3.1.0_svelte@4.2.12_vite@5.1.6_@types+node@2_2u254ct7qm36b7bhv2pa3n7zby/node_modules/@sveltejs/kit/src/runtime/server/index.js": {
+    "file": "index.js",
+    "src": "node_modules/.pnpm/@sveltejs+kit@2.5.4_@sveltejs+vite-plugin-svelte@3.1.0_svelte@4.2.12_vite@5.1.6_@types+node@2_2u254ct7qm36b7bhv2pa3n7zby/node_modules/@sveltejs/kit/src/runtime/server/index.js",
+    "isEntry": true,
+    "imports": [
+      "_internal.js",
+      "_index.js",
+      "_exports.js",
+      "_index2.js",
+      "_shared-server.js"
+    ]
+  },
+  "src/routes/(home)/+page.svelte": {
+    "file": "entries/pages/(home)/_page.svelte.js",
+    "src": "src/routes/(home)/+page.svelte",
+    "isEntry": true,
+    "imports": [
+      "_ssr.js",
+      "_index2.js",
+      "_Meta.js"
+    ],
+    "css": [
+      "_app/immutable/assets/_page.DPtMSwUI.css"
+    ]
+  },
+  "src/routes/+error.svelte": {
+    "file": "entries/pages/_error.svelte.js",
+    "src": "src/routes/+error.svelte",
+    "isEntry": true,
+    "imports": [
+      "_ssr.js",
+      "_stores.js"
+    ]
+  },
+  "src/routes/+layout.svelte": {
+    "file": "entries/pages/_layout.svelte.js",
+    "src": "src/routes/+layout.svelte",
+    "isEntry": true,
+    "imports": [
+      "_ssr.js",
+      "_stores.js",
+      "_index2.js"
+    ],
+    "css": [
+      "_app/immutable/assets/_layout.DZCaqc4V.css"
+    ]
+  },
+  "src/routes/api/now-playing/+server.ts": {
+    "file": "entries/endpoints/api/now-playing/_server.ts.js",
+    "src": "src/routes/api/now-playing/+server.ts",
+    "isEntry": true,
+    "imports": [
+      "_index.js",
+      "_shared-server.js",
+      "_spotify.js"
+    ]
+  },
+  "src/routes/api/top-tracks/+server.ts": {
+    "file": "entries/endpoints/api/top-tracks/_server.ts.js",
+    "src": "src/routes/api/top-tracks/+server.ts",
+    "isEntry": true,
+    "imports": [
+      "_shared-server.js",
+      "_spotify.js",
+      "_index.js"
+    ]
+  },
+  "src/routes/music/+page.svelte": {
+    "file": "entries/pages/music/_page.svelte.js",
+    "src": "src/routes/music/+page.svelte",
+    "isEntry": true,
+    "imports": [
+      "_ssr.js",
+      "_Meta.js"
+    ],
+    "css": [
+      "_app/immutable/assets/_page.BJfP06gv.css"
+    ]
+  },
+  "src/routes/projects/+page.svelte": {
+    "file": "entries/pages/projects/_page.svelte.js",
+    "src": "src/routes/projects/+page.svelte",
+    "isEntry": true,
+    "imports": [
+      "_ssr.js",
+      "_Meta.js"
+    ]
+  }
+}

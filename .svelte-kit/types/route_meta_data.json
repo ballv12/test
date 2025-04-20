@@ -1,0 +1,12 @@
+{
+	"/(home)": [],
+	"/": [],
+	"/api/now-playing": [
+		"src/routes/api/now-playing/+server.ts"
+	],
+	"/api/top-tracks": [
+		"src/routes/api/top-tracks/+server.ts"
+	],
+	"/music": [],
+	"/projects": []
+}

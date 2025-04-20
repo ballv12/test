@@ -7,7 +7,7 @@ export default {
       fallback: '404.html'
     }),
     paths: {
-      base: process.env.NODE_ENV === 'production' ? '/bellv-main' : ''
+      base: process.env.NODE_ENV === 'production' ? '/bell-main' : ''
     }
   },
   preprocess: preprocess(),

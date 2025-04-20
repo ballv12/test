@@ -52,7 +52,13 @@ async function refreshSpotifyToken(fetch: (input: RequestInfo | URL, init?: Requ
 		},
 		body: new URLSearchParams({
 			grant_type: 'refresh_token',
-			refresh_token: env.SPOTIFY_REFRESH_TOKEN
+			refresh_token: env.SPOTIFY_REFRESH_TOKEN,
+			scope: [
+				'user-read-currently-playing',
+				'user-read-recently-played',
+				'user-top-read',
+				'user-read-playback-state'
+			].join(' ')
 		})
 	});
 
@@ -74,7 +80,7 @@ export async function getSpotifyAccessToken({
 	const kv = makeKV(platform);
 	
 	try {
-		let accessTokenRaw = await kv.get('accessToken');
+		const accessTokenRaw = await kv.get('accessToken');
 		let accessToken: AccessToken;
 		
 		const expirationTime = Number(await kv.get('expirationTime')) || 0;
@@ -98,10 +104,10 @@ export async function getSpotifyAccessToken({
 		}
 		
 		return accessToken;
-	} catch (error) {
-		if (error instanceof SpotifyAuthError) {
-			throw error;
+	} catch (err: unknown) {
+		if (err instanceof SpotifyAuthError) {
+			throw err;
 		}
-		throw new SpotifyAuthError(`Failed to get access token: ${error.message}`);
+		throw new SpotifyAuthError(`Failed to get access token: ${err instanceof Error ? err.message : 'Unknown error'}`);
 	}
 }

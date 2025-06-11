@@ -1,6 +1,5 @@
 import type { AccessToken } from '@spotify/web-api-ts-sdk';
 import { env } from '$env/dynamic/private';
-import { error } from '@sveltejs/kit';
 
 type AccessTokenResponse = {
 	access_token: string;
@@ -9,51 +8,106 @@ type AccessTokenResponse = {
 	scope: string;
 };
 
-let cachedToken: AccessToken | null = null;
-let tokenExpirationTime = 0;
+// this is available in cloudflare
+declare const btoa: (input: string) => string;
+
+class SpotifyAuthError extends Error {
+	constructor(message: string) {
+		super(message);
+		this.name = 'SpotifyAuthError';
+	}
+}
+
+const mockKV = (() => {
+	const kv: Record<string, string | undefined> = {};
+
+	return () => ({
+		async get(key: string) {
+			return kv[key];
+		},
+		async put(key: string, value: string) {
+			kv[key] = value;
+		}
+	});
+})();
+
+function makeKV(platform: Readonly<App.Platform> | undefined) {
+	if (!platform?.env?.SPOTIFY_KV) {
+		return mockKV();
+	}
+
+	return platform.env?.SPOTIFY_KV;
+}
+
+async function refreshSpotifyToken(fetch: (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>): Promise<AccessTokenResponse> {
+	if (!env.SPOTIFY_CLIENT_ID || !env.SPOTIFY_CLIENT_SECRET || !env.SPOTIFY_REFRESH_TOKEN) {
+		throw new SpotifyAuthError('Missing Spotify credentials in environment variables');
+	}
+
+	const response = await fetch('https://accounts.spotify.com/api/token', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/x-www-form-urlencoded',
+			Authorization: `Basic ${btoa(`${env.SPOTIFY_CLIENT_ID}:${env.SPOTIFY_CLIENT_SECRET}`)}`
+		},
+		body: new URLSearchParams({
+			grant_type: 'refresh_token',
+			refresh_token: env.SPOTIFY_REFRESH_TOKEN,
+			scope: [
+				'user-read-currently-playing',
+				'user-read-recently-played',
+				'user-top-read',
+				'user-read-playback-state'
+			].join(' ')
+		})
+	});
+
+	if (!response.ok) {
+		const error = await response.json().catch(() => ({ error: 'Unknown error' }));
+		throw new SpotifyAuthError(`Failed to refresh token: ${error.error}`);
+	}
+
+	return response.json();
+}
 
 export async function getSpotifyAccessToken({
-	fetch
+	fetch,
+	platform
 }: {
-	fetch: (
-		input: RequestInfo | URL,
-		init?: RequestInit | undefined
-	) => Promise<Response>;
-	platform?: Readonly<App.Platform> | undefined;
-}) {
-	if (!env.SPOTIFY_CLIENT_ID || !env.SPOTIFY_CLIENT_SECRET || !env.SPOTIFY_REFRESH_TOKEN) {
-		throw error(500, 'Missing Spotify credentials');
-	}
-
-	// Check if we have a valid cached token
-	if (cachedToken && Date.now() < tokenExpirationTime) {
-		return cachedToken;
-	}
-
-	// If not, get a new token
-	const response: AccessTokenResponse = await fetch(
-		'https://accounts.spotify.com/api/token',
-		{
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/x-www-form-urlencoded',
-				Authorization: `Basic ${Buffer.from(
-					`${env.SPOTIFY_CLIENT_ID}:${env.SPOTIFY_CLIENT_SECRET}`
-				).toString('base64')}`
-			},
-			body: new URLSearchParams({
-				grant_type: 'refresh_token',
+	fetch: (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>;
+	platform: Readonly<App.Platform> | undefined;
+}): Promise<AccessToken> {
+	const kv = makeKV(platform);
+	
+	try {
+		const accessTokenRaw = await kv.get('accessToken');
+		let accessToken: AccessToken;
+		
+		const expirationTime = Number(await kv.get('expirationTime')) || 0;
+		const currentTime = Date.now();
+		
+		// Refresh token if it's expired or will expire in the next 5 minutes
+		if (!accessTokenRaw || currentTime > (expirationTime - 300000)) {
+			const response = await refreshSpotifyToken(fetch);
+			
+			await kv.put('accessToken', JSON.stringify(response));
+			await kv.put('expirationTime', `${currentTime + response.expires_in * 1000}`);
+			
+			accessToken = {
+				...response,
 				refresh_token: env.SPOTIFY_REFRESH_TOKEN
-			})
+			};
+		} else {
+			accessToken = JSON.parse(accessTokenRaw);
+			accessToken.expires_in = (expirationTime - currentTime) / 1000;
+			accessToken.refresh_token = env.SPOTIFY_REFRESH_TOKEN;
 		}
-	).then(res => res.json());
-
-	// Cache the token
-	cachedToken = {
-		...response,
-		refresh_token: env.SPOTIFY_REFRESH_TOKEN
-	};
-	tokenExpirationTime = Date.now() + response.expires_in * 1000;
-
-	return cachedToken;
+		
+		return accessToken;
+	} catch (err: unknown) {
+		if (err instanceof SpotifyAuthError) {
+			throw err;
+		}
+		throw new SpotifyAuthError(`Failed to get access token: ${err instanceof Error ? err.message : 'Unknown error'}`);
+	}
 }

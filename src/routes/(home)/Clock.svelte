@@ -8,14 +8,14 @@
 		day: 'numeric',
 		year: 'numeric',
 		month: 'long',
-		timeZone: 'America/Port_of_Spain'
+		timeZone: 'Etc/GMT+7'
 	});
 
 	const tf = new Intl.DateTimeFormat('en-US', {
 		hour: 'numeric',
 		minute: 'numeric',
 		second: 'numeric',
-		timeZone: 'America/Port_of_Spain',
+		timeZone: 'Etc/GMT+7',
 		timeZoneName: 'short'
 	});
 

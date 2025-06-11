@@ -8,6 +8,8 @@
     "@biomejs/biome": "^1.9.4"
   },
   "scripts": {
-    "build": "svelte-kit build"
+    "build": "svelte-kit build",
+    "dev": "svelte-kit dev",
+    "preview": "svelte-kit preview"
   }
 }
